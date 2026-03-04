@@ -21,7 +21,7 @@ async def fetch_latest_version(
         if resp.status_code != 200:
             return None
         data = resp.json()
-    except httpx.HTTPError, ValueError:
+    except (httpx.HTTPError, ValueError):
         return None
 
     latest_str = data.get("info", {}).get("version")

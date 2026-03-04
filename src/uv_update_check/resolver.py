@@ -68,8 +68,6 @@ def compute_all_updates(
 
 def _format_specifier(operator: str, version: str) -> str:
     """Reconstruct a specifier string preserving the original operator style."""
-    if operator == "^":
-        return f"^{version}"
-    if operator in (">=", "<=", ">", "<", "!=", "~=", "=="):
+    if operator:
         return f"{operator}{version}"
     return version
