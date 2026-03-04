@@ -16,6 +16,9 @@
   <a href="https://pypi.org/project/uv-update-check">
     <img src="https://img.shields.io/pypi/pyversions/uv-update-check.svg?style=for-the-badge" alt="python versions" />
   </a>
+  <a href="https://github.com/mgcrea/uv-update-check/actions/workflows/ci.yml">
+    <img src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/mgcrea/432a6756ff172befcbb5fefc47374a2e/raw/coverage.json&style=for-the-badge" alt="coverage" />
+  </a>
 </p>
 
 A minimalist [npm-check-updates](https://github.com/raineorshine/npm-check-updates) equivalent for [uv](https://docs.astral.sh/uv/) projects. Check your `pyproject.toml` dependencies against PyPI and see what's outdated — in the exact same output style as `ncu`.
