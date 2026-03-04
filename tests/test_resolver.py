@@ -2,14 +2,13 @@ from __future__ import annotations
 
 from packaging.version import Version
 
-from uv_update_check.models import ChangeType, DependencySection
+from uv_update_check.models import ChangeType
 from uv_update_check.resolver import (
     _format_specifier,
     classify_change,
     compute_all_updates,
     compute_update,
 )
-
 
 # --- classify_change ---
 
