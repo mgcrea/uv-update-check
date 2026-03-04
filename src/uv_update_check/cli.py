@@ -35,18 +35,20 @@ def main(
     update: Annotated[bool, typer.Option("--update", "-u", help="Update pyproject.toml with new versions")] = False,
     path: Annotated[pathlib.Path | None, typer.Option("--path", "-p", help="Path to pyproject.toml")] = None,
     pre: Annotated[bool, typer.Option("--pre", help="Include pre-release versions")] = False,
+    reject: Annotated[str | None, typer.Option("--reject", "-x", help="Exclude packages (comma-delimited)")] = None,
     version: Annotated[
         bool | None, typer.Option("--version", "-V", callback=_version_callback, is_eager=True, help="Show version")
     ] = None,
 ) -> None:
     """Check pyproject.toml dependencies for available updates."""
-    anyio.run(lambda: _async_main(update, path, pre))
+    anyio.run(lambda: _async_main(update, path, pre, reject))
 
 
 async def _async_main(
     update: bool,
     path: pathlib.Path | None,
     pre: bool,
+    reject: str | None,
 ) -> None:
     # 1. Find and load pyproject.toml
     try:
@@ -64,6 +66,10 @@ async def _async_main(
     deps = extract_dependencies(doc)
     # Filter out skippable deps
     fetchable = [d for d in deps if not d.is_url and not d.is_unpinned]
+
+    if reject:
+        rejected = {r.strip() for r in reject.split(",")}
+        fetchable = [d for d in fetchable if d.name not in rejected]
 
     if not fetchable:
         console.print("No dependencies found.")
