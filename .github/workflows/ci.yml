@@ -25,10 +25,22 @@ jobs:
       - uses: astral-sh/setup-uv@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - run: uv run pytest tests/ -v --cov-report=xml
-      - name: Upload coverage
-        if: github.event_name == 'pull_request'
-        uses: orgoro/coverage@v3.2
+      - name: Run tests
+        id: coverage
+        run: |
+          output=$(uv run pytest tests/ -v --cov-report=xml 2>&1)
+          echo "$output"
+          total=$(echo "$output" | grep '^TOTAL' | awk '{print $NF}' | tr -d '%')
+          echo "total=$total" >> "$GITHUB_OUTPUT"
+      - name: Coverage badge
+        if: github.ref == 'refs/heads/main'
+        uses: schneegans/dynamic-badges-action@v1.7.0
         with:
-          coverageFile: coverage.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: 432a6756ff172befcbb5fefc47374a2e
+          filename: coverage.json
+          label: coverage
+          message: ${{ steps.coverage.outputs.total }}%
+          valColorRange: ${{ steps.coverage.outputs.total }}
+          minColorRange: 50
+          maxColorRange: 90
