@@ -1,5 +1,23 @@
 # uuc — uv update check
 
+<p>
+  <a href="https://pypi.org/project/uv-update-check">
+    <img src="https://img.shields.io/pypi/v/uv-update-check.svg?style=for-the-badge" alt="pypi version" />
+  </a>
+  <a href="https://pypi.org/project/uv-update-check">
+    <img src="https://img.shields.io/pypi/dm/uv-update-check.svg?style=for-the-badge" alt="pypi monthly downloads" />
+  </a>
+  <a href="https://pypi.org/project/uv-update-check">
+    <img src="https://img.shields.io/pypi/l/uv-update-check.svg?style=for-the-badge" alt="pypi license" />
+  </a>
+  <a href="https://github.com/mgcrea/uv-update-check/actions/workflows/ci.yml">
+    <img src="https://img.shields.io/github/actions/workflow/status/mgcrea/uv-update-check/ci.yml?style=for-the-badge&branch=main" alt="build status" />
+  </a>
+  <a href="https://pypi.org/project/uv-update-check">
+    <img src="https://img.shields.io/pypi/pyversions/uv-update-check.svg?style=for-the-badge" alt="python versions" />
+  </a>
+</p>
+
 A minimalist [npm-check-updates](https://github.com/raineorshine/npm-check-updates) equivalent for [uv](https://docs.astral.sh/uv/) projects. Check your `pyproject.toml` dependencies against PyPI and see what's outdated — in the exact same output style as `ncu`.
 
 ```
