@@ -80,9 +80,7 @@ async def fetch_all_versions(
     async def _fetch_one(dep: Dependency, client: httpx.AsyncClient) -> None:
         nonlocal completed
         async with limiter:
-            version = await fetch_latest_version(
-                client, dep.name, dep.current_version, target, include_pre
-            )
+            version = await fetch_latest_version(client, dep.name, dep.current_version, target, include_pre)
             results[dep.name] = version
             completed += 1
             if on_progress:
