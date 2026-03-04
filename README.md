@@ -39,11 +39,23 @@ uuc
 # Update pyproject.toml with latest versions
 uuc -u
 
+# Only show minor/patch updates (no breaking changes)
+uuc -t minor
+
+# Only show patch updates
+uuc -t patch
+
+# Exclude specific packages
+uuc -x httpx,rich
+
 # Check a specific project
 uuc --path /path/to/pyproject.toml
 
 # Include pre-release versions
 uuc --pre
+
+# Combine flags
+uuc -t minor -x httpx -u
 ```
 
 ### Options
@@ -51,6 +63,8 @@ uuc --pre
 | Flag | Description |
 |---|---|
 | `-u`, `--update` | Rewrite `pyproject.toml` with new versions |
+| `-t`, `--target` | Target version level: `latest` (default), `minor`, `patch` |
+| `-x`, `--reject` | Exclude packages (comma-delimited) |
 | `-p`, `--path` | Path to `pyproject.toml` (default: search from cwd) |
 | `--pre` | Include pre-release versions |
 | `-V`, `--version` | Show version |
