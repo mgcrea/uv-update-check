@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import httpx
-import pytest
 import respx
 from typer.testing import CliRunner
 
@@ -26,9 +25,9 @@ class TestRejectFlag:
         p = tmp_path / "pyproject.toml"
         p.write_text(toml)
 
-        releases = {"2.28": [], "3.0.0": []}
+        releases = {"8.0": [], "9.0.0": []}
         respx.get("https://pypi.org/pypi/click/json").mock(
-            return_value=httpx.Response(200, json=_pypi_json("3.0.0", releases))
+            return_value=httpx.Response(200, json=_pypi_json("9.0.0", releases))
         )
         # requests should NOT be fetched since it's rejected
         result = runner.invoke(app, ["--path", str(p), "--reject", "requests"])
