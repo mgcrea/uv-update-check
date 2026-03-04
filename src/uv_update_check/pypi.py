@@ -21,7 +21,7 @@ async def fetch_latest_version(
         if resp.status_code != 200:
             return None
         data = resp.json()
-    except (httpx.HTTPError, ValueError):
+    except httpx.HTTPError, ValueError:
         return None
 
     latest_str = data.get("info", {}).get("version")
@@ -34,11 +34,7 @@ async def fetch_latest_version(
     # scan releases for the latest stable version
     if not include_pre and (latest.is_prerelease or latest.is_devrelease):
         releases = data.get("releases", {})
-        stable = [
-            Version(v)
-            for v in releases
-            if not Version(v).is_prerelease and not Version(v).is_devrelease
-        ]
+        stable = [Version(v) for v in releases if not Version(v).is_prerelease and not Version(v).is_devrelease]
         if not stable:
             return None
         return max(stable)
@@ -67,9 +63,8 @@ async def fetch_all_versions(
             if on_progress:
                 on_progress(completed, total)
 
-    async with httpx.AsyncClient(timeout=30) as client:
-        async with anyio.create_task_group() as tg:
-            for dep in dependencies:
-                tg.start_soon(_fetch_one, dep, client)
+    async with httpx.AsyncClient(timeout=30) as client, anyio.create_task_group() as tg:
+        for dep in dependencies:
+            tg.start_soon(_fetch_one, dep, client)
 
     return results

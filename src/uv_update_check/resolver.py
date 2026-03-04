@@ -63,10 +63,7 @@ def compute_all_updates(
     latest_versions: dict[str, Version | None],
 ) -> list[UpdateResult]:
     """Compute updates for all dependencies."""
-    return [
-        compute_update(dep, latest_versions.get(dep.name))
-        for dep in dependencies
-    ]
+    return [compute_update(dep, latest_versions.get(dep.name)) for dep in dependencies]
 
 
 def _format_specifier(operator: str, version: str) -> str:

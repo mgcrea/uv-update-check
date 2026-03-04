@@ -9,7 +9,9 @@ from packaging.requirements import Requirement
 from uv_update_check.models import Dependency, DependencySection
 
 # Regex to detect caret operator before packaging sees it
-_CARET_RE = re.compile(r"^(?P<name>[A-Za-z0-9]([A-Za-z0-9._-]*[A-Za-z0-9])?)(?P<extras>\[.*?\])?\s*\^(?P<version>\S+)(?P<rest>.*)$")
+_CARET_RE = re.compile(
+    r"^(?P<name>[A-Za-z0-9]([A-Za-z0-9._-]*[A-Za-z0-9])?)(?P<extras>\[.*?\])?\s*\^(?P<version>\S+)(?P<rest>.*)$"
+)
 
 
 def find_pyproject(start_dir: pathlib.Path | None = None) -> pathlib.Path:

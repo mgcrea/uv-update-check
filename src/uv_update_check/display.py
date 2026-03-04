@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from packaging.version import Version
 from rich.console import Console
-from rich.progress import MofNCompleteColumn, Progress, ProgressColumn, TaskProgressColumn, TextColumn
+from rich.progress import MofNCompleteColumn, Progress, ProgressColumn, TaskProgressColumn
 from rich.text import Text
 
 from uv_update_check.models import ChangeType, UpdateResult
@@ -17,7 +16,7 @@ class NcuBarColumn(ProgressColumn):
         super().__init__()
         self.width = width
 
-    def render(self, task):  # noqa: ANN001
+    def render(self, task):
         completed = int(task.completed or 0)
         total = int(task.total or 1)
         filled = int(self.width * completed / total) if total else 0
@@ -49,7 +48,7 @@ def display_results(
     outdated = [r for r in results if r.change_type != ChangeType.NONE and not r.skipped and not r.error]
 
     if not outdated:
-        console.print(f"All dependencies match the latest package versions [green bold]:)[/green bold]")
+        console.print("All dependencies match the latest package versions [green bold]:)[/green bold]")
         return
 
     # Compute column widths for alignment
@@ -59,7 +58,7 @@ def display_results(
 
     console.print()
 
-    for result, old_spec in zip(outdated, old_specs):
+    for result, old_spec in zip(outdated, old_specs, strict=True):
         name = result.dependency.name
         new_spec = result.new_specifier
         color = _color_for_change(result.change_type)
@@ -79,9 +78,9 @@ def display_results(
 
     console.print()
     if is_update:
-        console.print(f"pyproject.toml upgraded. Run [bold]uv lock[/bold] to update the lockfile.")
+        console.print("pyproject.toml upgraded. Run [bold]uv lock[/bold] to update the lockfile.")
     else:
-        console.print(f"Run [bold]uuc -u[/bold] to upgrade pyproject.toml")
+        console.print("Run [bold]uuc -u[/bold] to upgrade pyproject.toml")
 
 
 def _color_for_change(change_type: ChangeType) -> str:
@@ -107,7 +106,7 @@ def _format_specifier(operator: str, version: str) -> str:
 def _colorize_new_spec(old_spec: str, new_spec: str, color: str) -> Text:
     """Colorize only the changed parts of the new version (ncu-style partial coloring)."""
     # Extract version parts from both specs
-    old_op, old_ver = _split_spec(old_spec)
+    _, old_ver = _split_spec(old_spec)
     new_op, new_ver = _split_spec(new_spec)
 
     text = Text()
@@ -145,5 +144,5 @@ def _split_spec(spec: str) -> tuple[str, str]:
     """Split a specifier into (operator, version)."""
     for op in (">=", "<=", "!=", "~=", "==", ">", "<", "^"):
         if spec.startswith(op):
-            return op, spec[len(op):]
+            return op, spec[len(op) :]
     return "", spec

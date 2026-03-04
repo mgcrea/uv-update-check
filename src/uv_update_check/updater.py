@@ -15,9 +15,7 @@ def apply_updates(
 ) -> int:
     """Rewrite pyproject.toml with updated version specifiers. Returns count of updates applied."""
     updatable = {
-        r.dependency.name: r
-        for r in results
-        if r.change_type != ChangeType.NONE and not r.skipped and not r.error
+        r.dependency.name: r for r in results if r.change_type != ChangeType.NONE and not r.skipped and not r.error
     }
 
     if not updatable:

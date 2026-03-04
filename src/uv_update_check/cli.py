@@ -35,7 +35,9 @@ def main(
     update: Annotated[bool, typer.Option("--update", "-u", help="Update pyproject.toml with new versions")] = False,
     path: Annotated[pathlib.Path | None, typer.Option("--path", "-p", help="Path to pyproject.toml")] = None,
     pre: Annotated[bool, typer.Option("--pre", help="Include pre-release versions")] = False,
-    version: Annotated[bool | None, typer.Option("--version", "-V", callback=_version_callback, is_eager=True, help="Show version")] = None,
+    version: Annotated[
+        bool | None, typer.Option("--version", "-V", callback=_version_callback, is_eager=True, help="Show version")
+    ] = None,
 ) -> None:
     """Check pyproject.toml dependencies for available updates."""
     anyio.run(lambda: _async_main(update, path, pre))
@@ -54,7 +56,7 @@ async def _async_main(
             pyproject_path = find_pyproject(path)
     except FileNotFoundError:
         console.print("[red]No pyproject.toml found[/red]")
-        raise typer.Exit(1)
+        raise typer.Exit(1) from None
 
     doc = load_toml(pyproject_path)
 
