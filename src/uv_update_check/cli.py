@@ -36,12 +36,16 @@ def main(
     path: Annotated[pathlib.Path | None, typer.Option("--path", "-p", help="Path to pyproject.toml")] = None,
     pre: Annotated[bool, typer.Option("--pre", help="Include pre-release versions")] = False,
     reject: Annotated[str | None, typer.Option("--reject", "-x", help="Exclude packages (comma-delimited)")] = None,
+    target: Annotated[str, typer.Option("--target", "-t", help="Target version: latest, minor, patch")] = "latest",
     version: Annotated[
         bool | None, typer.Option("--version", "-V", callback=_version_callback, is_eager=True, help="Show version")
     ] = None,
 ) -> None:
     """Check pyproject.toml dependencies for available updates."""
-    anyio.run(lambda: _async_main(update, path, pre, reject))
+    if target not in ("latest", "minor", "patch"):
+        console.print(f"[red]Invalid target '{target}'. Use: latest, minor, patch[/red]")
+        raise typer.Exit(1)
+    anyio.run(lambda: _async_main(update, path, pre, reject, target))
 
 
 async def _async_main(
@@ -49,6 +53,7 @@ async def _async_main(
     path: pathlib.Path | None,
     pre: bool,
     reject: str | None,
+    target: str,
 ) -> None:
     # 1. Find and load pyproject.toml
     try:
@@ -92,6 +97,7 @@ async def _async_main(
         task_id = progress.add_task("Fetching", total=len(fetchable))
         latest_versions = await fetch_all_versions(
             fetchable,
+            target=target,
             include_pre=pre,
             on_progress=on_progress,
         )
